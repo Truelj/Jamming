@@ -1,22 +1,43 @@
-import fetch from 'node-fetch';
-
-/*
-fetch('https://itunes.apple.com/search?term=taylor+swift&limit=1&media=music')
-    .then((response)=>{response.json()})
-    .then((response)=>{console.log(response); return response.results[0];})
-    .then((result)=>{
-        const track = result.trackName;
-        const artist = result.artistName;
-        const album = result.collectionName;
-        console.log(`track: ${track} | artist: ${artist} | album: ${album}`);
-    });
-*/
-
-fetch('https://itunes.apple.com/search?term=taylor+swift&limit=1&media=music', {
-    headers: {
-        method: 'GET'
-        
+export const search = async (term) =>{
+    const baseURL = 'https://itunes.apple.com';
+    const endpoint = '/search';
+    const urlEncodedTerm = replaceSpace(term);
+    const parameters = `?term=${urlEncodedTerm}&limit=10&mediaType=music`;
+    const fetchURL = `${baseURL}${endpoint}${parameters}`;
+    
+    try{
+        const response = await fetch(fetchURL);
+        if(response.ok){
+            const jsonResponse = await response.json();
+            const results = jsonResponse.results;
+            console.log(results);
+            if(results.length === 0){
+                return results;//return an empty array
+            }else{
+                return results.map((result)=>{
+                    return {
+                        id: result.trackId,
+                        name: result.trackName, 
+                        artist: result.artistName,
+                        album: result.collectionName
+                    }
+                });
+            }
+        }else{
+            console.log('response is not successful');
+            console.log(`response status: ${response.status}`);
+        }
+    }catch(err){
+        console.log('asynchronous error thrown by await: ');
+        console.log(err);
     }
-})
-    .then((response)=> (response.json()))
-    .then((response)=>(console.log(response)));
+};
+
+//helper functions
+function replaceSpace(term){
+    //replace space in term with '+'. A url encoded text string should be returned.
+    return term.replace(' ', '+');
+}
+/* testing on the  functions
+console.log(replaceSpace('blank space'));
+*/

@@ -1,10 +1,11 @@
 //import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import SearchBar from '../SearchBar/SearchBar.js'; 
 import SearchResults from '../SearchResults/SearchResults.js';
 import Playlist from '../Playlist/Playlist.js';
 import {useState, useEffect} from 'react';
-import { Spotify } from '../../util/Spotify';
+import { search as searchItunes} from '../../util/itunes.js';
 
 const playlistTracksDefault = [
   {name: "Eraser", artist:"Ed Sheeran", album: "Deluxe", id:6},
@@ -23,14 +24,14 @@ const searchResultsDefault = [
 ];
 
 function App(props){
-  //set initial value for searchResults
+
   const [searchResults, setSearchResults] = useState(searchResultsDefault);
-  const [playlistTracks, setPlaylistTracks] = useState(playlistTracksDefault);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState(playlistNameDefault);
 
 
   useEffect(()=>{
-    Spotify.getAccessToken();
+    //
   },[]);
 
   //event handlers: addTrack, removeTrack, updatePlaylistName
@@ -70,8 +71,17 @@ function App(props){
   
   const search = (searchTerm) =>{
     console.log(searchTerm);
-    //later it will be hooked up to the Spotify API
-    //Spotify.search(searchTerm);
+    searchItunes(searchTerm)
+      .then((results)=>{
+        console.log('App:' + results);
+        for(const result of results){
+          console.log(`name: ${result.name} | artist: ${result.artist} | album: ${result.album}`);
+        }
+        setSearchResults((prev)=>{
+          return results; 
+        })
+      });
+    
   }
 
   return (

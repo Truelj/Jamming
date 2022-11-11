@@ -1,5 +1,5 @@
-import react from 'react';
-import Track from '../Track/Track';
+import React from 'react';
+import Track from '../Track/Track.js';
 
 function TrackList(props){
     const tracks = props.tracks;

@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import './Track.css';
 
 function Track(props){
@@ -22,8 +22,8 @@ function Track(props){
     return (
         <div className="Track">
             <div className="Track-information">
-                <h3>track name:{track.name} </h3>
-                <p>artist:{track.artist} | album {track.album}</p>
+                <h3>{track.name} </h3>
+                <p>{track.artist} |  {track.album}</p>
             </div>
             <button className="Track-action" onClick={isRemoval? removeTrack : addTrack}> {isRemoval ? "-":"+"}</button>
         </div>

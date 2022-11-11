@@ -1,9 +1,9 @@
-import react from 'react';
+import React from 'react';
 import './SearchBar.css';
 import {useState} from 'react';
 
 function SearchBar(props){
-    const [term, setTerm] = useState("Enter A Song, Album, or Artist");
+    const [term, setTerm] = useState("");
     
     const search=()=>{
         props.onSearch(term);
@@ -13,7 +13,9 @@ function SearchBar(props){
     }
     return (
         <div className="SearchBar">
-            <input value={term} onChange={handleTermChange}/>
+            <input 
+                placeholder="Enter A Song, Album, or Artist"
+                onChange={handleTermChange}/>
             <button className="SearchButton" onClick={search}>SEARCH</button>
         </div>
     )
